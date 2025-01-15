@@ -9,6 +9,11 @@ final GoRouter router = GoRouter(
       builder: (context, state) => LoginScreen(),
     ),
     GoRoute(
+      name: 'register',
+      path: '/register', // Ruta raíz o login
+      builder: (context, state) => RegisterScreen(),
+    ),
+    GoRoute(
       name: 'provinces',
       path: '/provinces',
       builder: (context, state) => ProvinciasScreen(),
@@ -27,17 +32,8 @@ final GoRouter router = GoRouter(
       builder: (context, state) {
         final int idProvince = int.parse(state.pathParameters['idProvince']!);
         final int idComarca = int.parse(state.pathParameters['idComarca']!);
-        return ComarcaInfo1(idProvince: idProvince, idComarca: idComarca,);
+        return ComarcaInfo(idProvince: idProvince, idComarca: idComarca,);
       }
-    ),
-    GoRoute(
-        name: 'counties_info2',
-        path: '/counties_info2/:idProvince/:idComarca',
-        builder: (context, state) {
-          final int idProvince = int.parse(state.pathParameters['idProvince']!);
-          final int idComarca = int.parse(state.pathParameters['idComarca']!);
-          return ComarcaInfo2(idProvince,idComarca);
-        }
     ),
   ],
 );

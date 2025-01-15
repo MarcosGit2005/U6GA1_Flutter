@@ -1,5 +1,5 @@
 export 'login.dart';
 export 'counties.dart';
-export 'info_comarca_1.dart';
-export 'info_comarca_2.dart';
+export 'info_comarca.dart';
 export 'provinces.dart';
+export 'register.dart';

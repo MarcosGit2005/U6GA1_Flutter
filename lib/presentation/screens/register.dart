@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'provinces.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,13 +12,8 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Imagen en la parte superior
-              Image.asset(
-                'assets/img/mapa_comunidad_valenciana.png', // Asegúrate de tener la imagen en assets y configurar el pubspec.yaml
-                height: 150,
-              ),
-              const SizedBox(height: 40), // Espacio entre la imagen y los TextFields
-
+              Text("Registrarse: "),
+              const SizedBox(height: 40),
               // Campo de correo electrónico
               const TextField(
                 decoration: InputDecoration(
@@ -42,16 +38,16 @@ class LoginScreen extends StatelessWidget {
               // Botón de inicio de sesión
               ElevatedButton(
                 onPressed: () {
-                  context.push("/provinces");
+                  context.push("/");
                 },
-                child: Text('Iniciar sesión'),
+                child: Text('Cancelar'),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 ),
               ),
               ElevatedButton(
                 onPressed: () {
-                  context.push("/register");
+                  context.push("/");
                 },
                 child: Text('Registrarse'),
                 style: ElevatedButton.styleFrom(

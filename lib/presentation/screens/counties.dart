@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:u3ga1_marcosrubio/presentation/screens/info_comarca_1.dart';
+import 'package:u3ga1_marcosrubio/presentation/screens/info_comarca.dart';
 import '../../data/counties.dart';
 
 class ComarquesScreen extends StatelessWidget {
