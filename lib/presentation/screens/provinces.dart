@@ -1,12 +1,42 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/counties.dart';
 import 'counties.dart';
 
 class ProvinciasScreen extends StatelessWidget {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print("Error al cerrar sesión: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(_auth.currentUser!.email!),
+        actions: <Widget>[
+          PopupMenuButton(itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                  child: InkWell(
+                    child: Text("Cerrar sesión"),
+                    onTap: () {
+                      Navigator.pop(context);
+                      signOut();
+                    },
+                  ),
+              ),
+            ];
+          })
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,7 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String user = "";
+  String password = "";
+
+  Future<void> signIn(String email, String password) async{
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      print("Inicio de sesión exitoso");
+    } catch (e){
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,22 +34,28 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 40), // Espacio entre la imagen y los TextFields
 
               // Campo de correo electrónico
-              const TextField(
+              TextField(
                 decoration: InputDecoration(
                   labelText: 'Usuario',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.email),
                 ),
+                onChanged: (text) {
+                  this.user = text;
+                },
               ),
               const SizedBox(height: 20), // Espacio entre los campos
 
               // Campo de contraseña
-              const TextField(
+              TextField(
                 decoration: InputDecoration(
                   labelText: 'Contraseña',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.lock),
                 ),
+                onChanged: (text) {
+                  this.password = text;
+                },
                 obscureText: true, // Para ocultar la contraseña
               ),
               const SizedBox(height: 40), // Espacio entre el campo y el botón
@@ -42,7 +63,7 @@ class LoginScreen extends StatelessWidget {
               // Botón de inicio de sesión
               ElevatedButton(
                 onPressed: () {
-                  context.push("/provinces");
+                  signIn(this.user, this.password);
                 },
                 child: Text('Iniciar sesión'),
                 style: ElevatedButton.styleFrom(

@@ -1,12 +1,14 @@
+import 'package:u3ga1_marcosrubio/presentation/screens/wrapper.dart';
+
 import '../../presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
   routes: [
     GoRoute(
-      name: 'login',
+      name: 'wrapper',
       path: '/', // Ruta raíz o login
-      builder: (context, state) => LoginScreen(),
+      builder: (context, state) => const Wrapper(),
     ),
     GoRoute(
       name: 'register',
