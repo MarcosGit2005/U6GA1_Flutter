@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../data/counties.dart';
-import 'counties.dart';
+import '../../data/peticions_http.dart';
 
 class ProvinciasScreen extends StatelessWidget {
 
@@ -38,28 +37,32 @@ class ProvinciasScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Primer círculo
-            _buildCircle(context, 2),
-            SizedBox(height: 30), // Espacio entre los círculos
-            // Segundo círculo
-            _buildCircle(context,0),
-            SizedBox(height: 30), // Espacio entre los círculos
-            // Tercer círculo
-            _buildCircle(context, 1),
-          ],
-        ),
+        child:  FutureBuilder(
+          future: obtenerProvincias(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              List<GestureDetector> columnChildren = [];
+              snapshot.data.forEach((provincia) => {
+                columnChildren.add(_buildCircle(context, provincia['img'], provincia['provincia']))
+              });
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: columnChildren,
+              );
+            }
+            return const CircularProgressIndicator();
+          }
+        )
       ),
     );
   }
 
   // Método para construir cada círculo
-  Widget _buildCircle(BuildContext context, int id) {
+  GestureDetector _buildCircle(BuildContext context, String imageSource, String provinceName) {
     return GestureDetector(
       onTap: () {
-        context.push("/counties/$id");
+        context.push("/counties/$provinceName");
       },
       child: Container(
         width: 150,
@@ -67,13 +70,13 @@ class ProvinciasScreen extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: NetworkImage(provincies["provincies"][id]["img"]),
+            image: NetworkImage(imageSource),
             fit: BoxFit.cover,
           ),
         ),
         alignment: Alignment.center,
         child: Text(
-          provincies["provincies"][id]["provincia"],
+          provinceName,
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,

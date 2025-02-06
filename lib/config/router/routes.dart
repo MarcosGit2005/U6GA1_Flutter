@@ -22,19 +22,19 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       name: 'counties',
-      path: '/counties/:idProvince',
+      path: '/counties/:provinceName',
       builder: (context, state) {
-        final int idProvince = int.parse(state.pathParameters['idProvince']!);
-        return ComarquesScreen(idProvince: idProvince);
+        final String provinceName = state.pathParameters['provinceName']!;
+        return ComarquesScreen(provinceName: provinceName);
       }
     ),
     GoRoute(
-      name: 'counties_info1',
-      path: '/counties_info1/:idProvince/:idComarca',
+      name: 'counties_info',
+      path: '/counties_info/:provinceName/:comarcaName',
       builder: (context, state) {
-        final int idProvince = int.parse(state.pathParameters['idProvince']!);
-        final int idComarca = int.parse(state.pathParameters['idComarca']!);
-        return ComarcaInfo(idProvince: idProvince, idComarca: idComarca,);
+        final String provinceName = state.pathParameters['provinceName']!;
+        final String comarcaName = state.pathParameters['comarcaName']!;
+        return ComarcaInfo(provinceName: provinceName, comarcaName: comarcaName,);
       }
     ),
   ],

@@ -1,58 +1,69 @@
 import 'package:flutter/material.dart';
 import '../../data/peticions_http.dart';
-import '../../data/counties.dart';
 
 class ComarcaInfo extends StatelessWidget {
-  final int idProvince;
-  final int idComarca;
-  ComarcaInfo({required this.idProvince, required this.idComarca});
+  final String provinceName;
+  final String comarcaName;
+  ComarcaInfo({required this.provinceName, required this.comarcaName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(provincies["provincies"][idProvince]["comarques"][idComarca]["comarca"]), // Título de la cabecera
+        title: Text(comarcaName), // Título de la cabecera
       ),
-      body: ComarcaInfoScreen(idProvince: idProvince,idComarca: idComarca,),
+      body: ComarcaInfoScreen(provinciaName: provinceName,comarcaName: comarcaName,),
     );
   }
 }
 class ComarcaInfoScreen extends StatefulWidget {
-  final int idProvince;
-  final int idComarca;
+  final String provinciaName;
+  final String comarcaName;
 
-  ComarcaInfoScreen({required this.idProvince, required this.idComarca});
+  ComarcaInfoScreen({required this.provinciaName, required this.comarcaName});
 
   @override
-  _ComarcaInfoScreenState createState() => _ComarcaInfoScreenState(idProvince: idProvince,idComarca: idComarca);
+  _ComarcaInfoScreenState createState() => _ComarcaInfoScreenState(provinciaName: provinciaName,comarcaName: comarcaName,);
 }
 
 class _ComarcaInfoScreenState extends State<ComarcaInfoScreen> {
-  final int idProvince;
-  final int idComarca;
-  _ComarcaInfoScreenState({required this.idProvince, required this.idComarca});
+  final String provinciaName;
+  final String comarcaName;
+  _ComarcaInfoScreenState({required this.provinciaName, required this.comarcaName});
 
   late Future<dynamic> info;
-  bool showFirstContent = true;
   double latitud = 0;
   double longitud = 0;
+  String imgUrl = "";
+  String capital = "";
+  String descripcion = "";
 
-  @override
-  void initState() {
-    latitud = provincies["provincies"][idProvince]["comarques"][idComarca]["coordenades"][0];
-    longitud = provincies["provincies"][idProvince]["comarques"][idComarca]["coordenades"][1];
-
-    info = obteClima(
-        longitud: longitud, latitud: latitud);
-  }
+  bool showFirstContent = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: showFirstContent
-            ? _buildFirstContent()
-            : _buildSecondContent(),
+      body: FutureBuilder(
+        future: obtenerInfoComarca(comarcaName),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            latitud = snapshot.data["latitud"];
+            longitud = snapshot.data["longitud"];
+            info = obteClima(
+                longitud: longitud, latitud: latitud);
+
+            imgUrl = snapshot.data["img"];
+            capital = snapshot.data["capital"];
+            descripcion = snapshot.data["desc"];
+
+            return Center(
+              child: showFirstContent
+                  ? _buildFirstContent()
+                  : _buildSecondContent(),
+            );
+          }
+          return const CircularProgressIndicator();
+        }
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -75,7 +86,7 @@ class _ComarcaInfoScreenState extends State<ComarcaInfoScreen> {
           width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(provincies["provincies"][idProvince]["comarques"][idComarca]["img"]), // Ruta de la imagen
+              image: NetworkImage(imgUrl), // Ruta de la imagen
               fit: BoxFit.cover,
             ),
           ),
@@ -87,7 +98,7 @@ class _ComarcaInfoScreenState extends State<ComarcaInfoScreen> {
             children: [
               // Título
               Text(
-                provincies["provincies"][idProvince]["comarques"][idComarca]["comarca"],
+                comarcaName,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -97,7 +108,7 @@ class _ComarcaInfoScreenState extends State<ComarcaInfoScreen> {
               SizedBox(height: 8),
               // Subtítulo
               Text(
-                'Capital: '+provincies["provincies"][idProvince]["comarques"][idComarca]["capital"],
+                'Capital: '+capital,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -107,7 +118,7 @@ class _ComarcaInfoScreenState extends State<ComarcaInfoScreen> {
               SizedBox(height: 16),
               // Descripción
               Text(
-                provincies["provincies"][idProvince]["comarques"][idComarca]["desc"],
+                descripcion,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],
